@@ -1,4 +1,26 @@
 #!/bin/sh
 
-echo "Whoops! vec1phyr's script does not support stashing, Please use Coolstar's tool to stash!"
-exit 0
+## NOTICE: This project has been abandoned long ago, if you believe that you for //SOME REASON// need this, I've updated all
+# code to the latest for 9.3.3 and lower. I don't recommend this AT ALL. It MAY or MAY NOT kill your homescreen, forcing you
+# to restore. I will provide a fixer for this.
+
+## CoolStar's stash util check, fails if run. //Applies to semi-untethered (Ex: PP/Pangu jailbreak 9.2-9.3.3)
+if [-d "/var/stash/appsstash"]; then
+	echo "Already stashed using Coolstar's utility, exiting..."
+	exit 0
+## Cydia's stash util check, fails if run. //Preparing Filesystem on first Cydia run. Only applied to untethered JB.
+elif [-d "/var/stash/*/Applications"]; then
+	echo "Already stashed on an untethered device, exiting..."
+	exit 0
+## StashMyStuff9 stash util check, fails if run. //Protects from double-run.
+elif [-e "/.cydia_yes_stash"]
+	echo "Already stashed using StashMyStuff9, exiting..."
+	exit 0
+## Runs the Cydia stasher after enabling stashing. Might also show as second failsafe ("Already stashed on untethered device")
+else
+	mv /.cydia_no_stash /.cydia_yes_stash
+	/usr/libexec/cydia/free.sh
+	echo "Done. You may safely remove StashMyApps. Restarting SpringBoard."
+	uicache
+	killall -HUP SpringBoard
+fi
