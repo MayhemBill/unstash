@@ -1,0 +1,50 @@
+#!/bin/sh -x
+
+platform=`uname`
+if [ $platform = "Darwin" ];
+then
+if [ -d /var/stash/*/Applications ]; 
+	then
+			echo "I can create a backup of your stashed Applications if you're" 
+			echo "entirely worried about losing them due to some sort of" 
+			echo "interruption during the move (very unlikely to happen.)"
+			echo
+			read -p "Would you like a backup? (y/n): " CONT
+			if [ "$CONT" == "y" ];
+			then
+				echo "Creating archive..."
+				tar zcf  /var/mobile/stash_bck.tar.gz /var/stash/*/Applications
+				echo "Archive made in /var/mobile"
+			else
+				echo "Skipped."
+			fi
+				if [ -d /Applications ]; 
+				then
+					rm /Applications
+				else
+					echo "/Applications not symlinked. Skipping..."
+					exit 0
+				fi
+			mv /var/stash/*/Applications /
+			cd ../ && rm -rf "$PWD"
+			cd /Applications
+				chown root:admin *
+				chown root:wheel Activator.app Cydia.app MTerminal.app
+				chown mobile:mobile Anemone.app
+				chown mobile:staff CrashReporter.app iCleaner.app
+			echo "Done."
+			echo
+			echo "All of your system applications SHOULD appear on the homescreen now."
+			echo "Cydia apps are most likely not gonna appear, if so. Please reinstall using Cydia."
+			echo
+			echo "Restarting SpringBoard..."
+				killall SpringBoard
+			exit 0
+	elif [ ! -d /var/stash/*/Applications ]; 
+	then
+		echo "Not stashed. Exiting."
+		exit 0
+	fi
+else
+echo "Fatal:" $platform "not compatible."
+fi

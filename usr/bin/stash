@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Whoops! vec1phyr's script does not support stashing, Please use Coolstar's tool to stash!"
+exit 0
