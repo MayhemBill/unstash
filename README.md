@@ -1,5 +1,7 @@
 # unstash
 
+I did this purely to spite V, I wouldn't recommend using it unless you know what you're doing :D -Bill
+
 Requires OpenSSH installed as well as safestrat (in-case of emergency)
 NOTE: These are not depends as this can also be run in Terminal but OpenSSH used when no homescreen icons are shown.
 
