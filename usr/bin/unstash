@@ -1,6 +1,7 @@
 #!/bin/sh
 
 platform=`uname`
+sysvers=`sw_vers -productVersion`
 if [ $platform = "Darwin" ];
 then
 if [ -d /var/stash/*/Applications ]; 
@@ -12,12 +13,20 @@ if [ -d /var/stash/*/Applications ];
 			read -p "Would you like a backup? (y/n): " CONT
 			if [ "$CONT" == "y" ];
 			then
-				echo "Creating archive..."
+				echo "Creating archive... (This may take awhile...)"
 				tar zcf  /var/mobile/stash_bck.tar.gz /var/stash/*/Applications
 				echo "Archive made in /var/mobile"
 			else
 				echo "Skipped."
 			fi
+				if [ $sysvers = "9.3.3" ];
+				then
+					echo "iOS" $sysvers "detected. I will be disabling Cydia stashing since using Cydia to stash is fatal. Use Coolstar's utility to stash."
+					echo -n "" > /.cydia_no_stash
+				else
+					echo
+				fi
+				set -e
 				if [ -d /Applications ]; 
 				then
 					rm /Applications
@@ -29,9 +38,7 @@ if [ -d /var/stash/*/Applications ];
 			cd ../ && rm -rf "$PWD"
 			cd /Applications
 				chown root:admin *
-				chown root:wheel Activator.app Cydia.app MTerminal.app
-				chown mobile:mobile Anemone.app
-				chown mobile:staff CrashReporter.app iCleaner.app
+				chown root:wheel Cydia.app
 			echo "Done."
 			echo
 			echo "All of your system applications SHOULD appear on the homescreen now."
